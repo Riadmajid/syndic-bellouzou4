@@ -2,26 +2,18 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
-// ⚠️ للمطور: استبدل appId بالقيمة الحقيقية من Firebase Console
-// الرابط: Firebase Console > Project Settings > Your apps > Web app > App ID
-// الشكل الصحيح: "1:221199418649:web:xxxxxxxxxxxxxxxx"
 const firebaseConfig = {
-  apiKey: "AIzaSyArFiSUvAMx5fCi0ks6szW3wj6bPcwd6SU",
+  apiKey: "AIzaSyDdIUHvUTRze0Pj8TqF36sKnlRUQcSCtUM",
   authDomain: "syndic-54327.firebaseapp.com",
+  databaseURL: "https://syndic-54327-default-rtdb.firebaseio.com",
   projectId: "syndic-54327",
   storageBucket: "syndic-54327.firebasestorage.app",
   messagingSenderId: "221199418649",
-  appId: "1:221199418649:web:temp_web_app_id_if_needed"
+  appId: "1:221199418649:web:0569352de9de01390af188",
+  measurementId: "G-37C59NTMP0"
 };
-
-if (firebaseConfig.appId.includes('temp')) {
-  console.warn(
-    '⚠️ Firebase appId is a placeholder! ' +
-    'Go to Firebase Console > Project Settings > Your apps > Web App ' +
-    'and copy the real appId to fix real-time sync issues on GitHub Pages.'
-  );
-}
 
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+
