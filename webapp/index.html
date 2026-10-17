@@ -1685,6 +1685,13 @@
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
+        try {
+            db.settings({
+                experimentalAutoDetectLongPolling: true
+            });
+        } catch (e) {
+            console.warn("Firestore settings notice:", e);
+        }
 
         // APP STATE
         let data = { buildings: [], apartments: [], payments: {}, expenses: [], announcements: [], chat: [] };
@@ -3492,16 +3499,19 @@
             const sendBtn = document.getElementById('chatSendBtn') || document.querySelector('button[onclick="sendChat()"]');
             if (sendBtn) sendBtn.disabled = true;
 
+            // Clear input immediately
+            if (inputEl) inputEl.value = '';
+            if (privateCheckbox) privateCheckbox.checked = false;
+
             // Send to Firestore — onSnapshot listener will update the chat display
             console.log("Sending chat message to syndic_chat:", message);
             db.collection("syndic_chat").doc(messageId.toString()).set(message)
                 .then(() => {
                     console.log("Chat message sent to Firestore successfully:", messageId);
-                    if (inputEl) inputEl.value = '';
-                    if (privateCheckbox) privateCheckbox.checked = false;
                 })
                 .catch(e => {
                     console.error("Chat send error:", e);
+                    if (inputEl) inputEl.value = m;
                     alert("تعذر إرسال الرسالة: " + (e.message || "يرجى التحقق من اتصالك بالإنترنت أو تفعيل حسابك من قبل الإدارة."));
                 })
                 .finally(() => {

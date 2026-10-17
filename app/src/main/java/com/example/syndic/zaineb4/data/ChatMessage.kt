@@ -12,8 +12,8 @@ data class ChatMessage(
     var name: String = "",
     var msg: String = "",
     var time: String = "",
-    var likes: Int = 0,
-    var dislikes: Int = 0,
+    var likes: Long = 0L,
+    var dislikes: Long = 0L,
     var replies: List<Comment> = emptyList(),
     @get:PropertyName("isPrivate")
     @set:PropertyName("isPrivate")
@@ -22,5 +22,5 @@ data class ChatMessage(
     var senderUid: String = "",
     var createdAt: Any? = null
 ) {
-    constructor() : this(0L, "", "", "", 0, 0, emptyList(), false, "", null)
+    constructor() : this(0L, "", "", "", 0L, 0L, emptyList(), false, "", null)
 }

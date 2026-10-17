@@ -342,8 +342,8 @@ class SyndicRepository {
                                 name = data["name"] as? String ?: "",
                                 msg = data["msg"] as? String ?: "",
                                 time = data["time"] as? String ?: "",
-                                likes = (data["likes"] as? Number)?.toInt() ?: 0,
-                                dislikes = (data["dislikes"] as? Number)?.toInt() ?: 0,
+                                likes = (data["likes"] as? Number)?.toLong() ?: 0L,
+                                dislikes = (data["dislikes"] as? Number)?.toLong() ?: 0L,
                                 isPrivate = rawIsPrivate,
                                 senderUid = data["senderUid"] as? String ?: ""
                             )
