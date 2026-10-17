@@ -19,7 +19,8 @@ data class ChatMessage(
     @set:PropertyName("isPrivate")
     @field:PropertyName("isPrivate")
     var isPrivate: Boolean = false,
-    var senderUid: String = ""
+    var senderUid: String = "",
+    var createdAt: Any? = null
 ) {
-    constructor() : this(0L, "", "", "", 0, 0, emptyList(), false, "")
+    constructor() : this(0L, "", "", "", 0, 0, emptyList(), false, "", null)
 }

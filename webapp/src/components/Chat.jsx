@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { db } from '../firebase';
-import { collection, onSnapshot, query, orderBy, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, onSnapshot, query, doc, setDoc } from 'firebase/firestore';
 
 export default function Chat({ user, userData }) {
   const [messages, setMessages] = useState([]);
@@ -17,15 +17,12 @@ export default function Chat({ user, userData }) {
         const d = doc.data();
         return {
           firebaseId: doc.id,
+          id: Number(d.id || doc.id),
           ...d
         };
       });
-      // Client‑side sorting: prioritize `createdAt` timestamp if present, otherwise fall back to Firestore doc ID.
-      msgs.sort((a, b) => {
-        const aTime = a.createdAt?.seconds ?? a.firebaseId;
-        const bTime = b.createdAt?.seconds ?? b.firebaseId;
-        return aTime - bTime;
-      });
+      // Client‑side sorting: sort by message id numerically (ascending = oldest first)
+      msgs.sort((a, b) => (Number(a.id) || 0) - (Number(b.id) || 0));
       setMessages(msgs);
 
       setError(null);
@@ -49,7 +46,9 @@ export default function Chat({ user, userData }) {
     setLoading(true);
     setError(null);
 
+    const messageId = Date.now();
     const newMsg = {
+      id: Number(messageId),
       name: userData?.name || (userData?.role === 'admin' ? 'Admin' : 'مجهول'),
       msg: msgText,
       time: new Date().toLocaleTimeString('ar-MA', { hour: '2-digit', minute: '2-digit' }),
@@ -57,12 +56,11 @@ export default function Chat({ user, userData }) {
       dislikes: 0,
       replies: [],
       isPrivate: false,
-      senderUid: user?.uid || '',
-      createdAt: serverTimestamp()
+      senderUid: user?.uid || ''
     };
 
     try {
-      await addDoc(collection(db, 'syndic_chat'), newMsg);
+      await setDoc(doc(db, 'syndic_chat', messageId.toString()), newMsg);
       input.value = '';
     } catch (err) {
       console.error("Error sending message:", err);
